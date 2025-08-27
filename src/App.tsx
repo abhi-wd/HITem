@@ -14,7 +14,7 @@ function App() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-[60vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-2">
+    <div className="flex items-center justify-center min-h-[95vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-2">
       {/* reduced min-h from full screen */}
       <div className="w-full max-w-sm bg-white/10 rounded-2xl shadow-lg p-4 text-center">
         <ConnectMenu />
