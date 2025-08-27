@@ -14,7 +14,8 @@ function App() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-2">
+    <div className="flex items-center justify-center min-h-[60vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-2">
+      {/* reduced min-h from full screen */}
       <div className="w-full max-w-sm bg-white/10 rounded-2xl shadow-lg p-4 text-center">
         <ConnectMenu />
       </div>
@@ -23,15 +24,16 @@ function App() {
 }
 
 function ConnectMenu() {
-  const { isConnected, address } = useAccount();
+  const { isConnected } = useAccount();
   const { connect, connectors } = useConnect();
 
   if (isConnected) {
     return (
       <div className="flex flex-col items-center">
         <div className="mb-3 text-center">
-          <div className="font-bold text-green-300">✅ Connected</div>
-          <div className="text-xs break-all">{address}</div>
+          <div className="w-3 h-3 bg-green-400 rounded-full mx-auto"></div>
+          {/* Replace address with just "." */}
+          <div className="text-xs">.</div>
         </div>
         <WhackFruitGame />
       </div>
@@ -49,7 +51,6 @@ function ConnectMenu() {
   );
 }
 
-
 function WhackFruitGame() {
   const [timeLeft, setTimeLeft] = useState(30);
   const [score, setScore] = useState(0);
@@ -61,7 +62,6 @@ function WhackFruitGame() {
   const [grid, setGrid] = useState(Array(9).fill(null));
   const lastIndexRef = useRef<number | null>(null);
 
-  // Confetti state
   const [confettiConfig, setConfettiConfig] = useState<{ x: number; y: number; active: boolean }>({
     x: 0,
     y: 0,
@@ -71,7 +71,7 @@ function WhackFruitGame() {
   const width = screenWidth * 0.9;
   const height = screenHeight * 0.9;
 
-  // Timer countdown
+  // Timer
   useEffect(() => {
     if (gameStarted && !gameOver && timeLeft > 0 && bombsHit < 2) {
       const timer = setTimeout(() => setTimeLeft((t) => t - 1), 1000);
@@ -81,7 +81,7 @@ function WhackFruitGame() {
     }
   }, [timeLeft, bombsHit, gameStarted, gameOver]);
 
-  // Spawn items on grid
+  // Spawn
   useEffect(() => {
     if (!gameStarted || gameOver) return;
 
@@ -89,13 +89,13 @@ function WhackFruitGame() {
       let idx: number;
       do {
         idx = Math.floor(Math.random() * 9);
-      } while (idx === lastIndexRef.current); // avoid same spot twice
+      } while (idx === lastIndexRef.current);
       lastIndexRef.current = idx;
 
       const rand = Math.random();
       let type = "fruit";
-      if (rand < 0.2) type = "coin"; // 20%
-      else if (rand < 0.5) type = "bomb"; // 30%
+      if (rand < 0.2) type = "coin";
+      else if (rand < 0.5) type = "bomb";
 
       setGrid((prev) => {
         const newGrid = [...prev];
@@ -111,7 +111,6 @@ function WhackFruitGame() {
         return newGrid;
       });
 
-      // Clear cell after short delay
       setTimeout(() => {
         setGrid((prev) => {
           const newGrid = [...prev];
@@ -121,26 +120,19 @@ function WhackFruitGame() {
       }, 900);
     };
 
-    // spawn immediately
     spawn();
-
-    // fixed spawn speed
     const spawnInterval = setInterval(spawn, 1200);
 
     return () => clearInterval(spawnInterval);
   }, [gameStarted, gameOver]);
 
-  // Handle click
+  // Clicks
   const handleCellClick = (cell: any, e: React.MouseEvent) => {
     if (!cell) return;
     if (cell.type === "coin") {
       setTokens((t) => t + 1);
-
       const rect = (e.target as HTMLElement).getBoundingClientRect();
-      const x = rect.left + rect.width / 2;
-      const y = rect.top + rect.height / 2;
-
-      setConfettiConfig({ x, y, active: true });
+      setConfettiConfig({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, active: true });
       setTimeout(() => setConfettiConfig({ x: 0, y: 0, active: false }), 3000);
     } else if (cell.type === "fruit") {
       setScore((s) => s + 1);
@@ -158,7 +150,7 @@ function WhackFruitGame() {
     setTokens(0);
     setBombsHit(0);
     setGameOver(false);
-    setGrid(Array(9).fill(null)); // clear grid
+    setGrid(Array(9).fill(null));
   };
 
   const handleClaimReward = () => {
@@ -167,7 +159,7 @@ function WhackFruitGame() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4"
+      className="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4"
       style={{ cursor: `url('https://cdn-icons-png.flaticon.com/512/1622/1622060.png') 32 32, auto` }}
     >
       {confettiConfig.active && (
@@ -190,13 +182,11 @@ function WhackFruitGame() {
         </button>
       ) : !gameOver ? (
         <>
-          {/* Top Bar */}
           <div className="w-full flex justify-between items-center max-w-md mb-6">
             <div className="text-lg font-bold">🪙 {tokens}</div>
             <div className="text-lg font-bold">Score: {score}</div>
           </div>
 
-          {/* Grid */}
           <div className="grid grid-cols-3 gap-4 mb-6">
             {grid.map((cell, i) => (
               <motion.div
@@ -210,7 +200,6 @@ function WhackFruitGame() {
             ))}
           </div>
 
-          {/* Timer Bar */}
           <div className="w-full max-w-md h-4 bg-gray-800 rounded-2xl overflow-hidden">
             <motion.div
               className="h-full bg-green-400"
