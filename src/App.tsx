@@ -36,14 +36,13 @@ function ConnectMenu() {
   }
 
   return (
-    // <button
-    //   type="button"
-    //   onClick={() => connect({ connector: connectors[0] })}
-    //   className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
-    // >
-    //   Connect Wallet
-    // </button>
-    <WhackFruitGame />
+    <button
+      type="button"
+      onClick={() => connect({ connector: connectors[0] })}
+      className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
+    >
+      Connect Wallet
+    </button>
   );
 }
 
@@ -77,7 +76,6 @@ function WhackFruitGame() {
     }
   }, [timeLeft, bombsHit, gameStarted, gameOver]);
 
-  // Spawn
   // Spawn
   useEffect(() => {
     if (!gameStarted || gameOver) return;
