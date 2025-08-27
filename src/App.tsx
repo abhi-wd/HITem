@@ -36,13 +36,14 @@ function ConnectMenu() {
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => connect({ connector: connectors[0] })}
-      className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
-    >
-      Connect Wallet
-    </button>
+    // <button
+    //   type="button"
+    //   onClick={() => connect({ connector: connectors[0] })}
+    //   className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
+    // >
+    //   Connect Wallet
+    // </button>
+    <WhackFruitGame />
   );
 }
 
@@ -122,12 +123,18 @@ function WhackFruitGame() {
   }, [gameStarted, gameOver]);
 
   // Clicks
-  const handleCellClick = (cell: any, e: React.MouseEvent) => {
+  const handleCellClick = (index: number, e: React.MouseEvent) => {
+    const cell = grid[index]; // always read from latest grid state
     if (!cell) return;
+
     if (cell.type === "coin") {
       setTokens((t) => t + 1);
       const rect = (e.target as HTMLElement).getBoundingClientRect();
-      setConfettiConfig({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, active: true });
+      setConfettiConfig({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        active: true,
+      });
       setTimeout(() => setConfettiConfig({ x: 0, y: 0, active: false }), 3000);
     } else if (cell.type === "fruit") {
       setScore((s) => s + 1);
@@ -137,6 +144,7 @@ function WhackFruitGame() {
       setTimeout(() => document.body.classList.remove("shake"), 500);
     }
   };
+
 
   const handleStart = () => {
     setGameStarted(true);
@@ -154,7 +162,7 @@ function WhackFruitGame() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-[90vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4"
+      className="flex flex-col items-center justify-center min-h-[90vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-y-4 p-x-4"
       style={{ cursor: `url('https://cdn-icons-png.flaticon.com/512/1622/1622060.png') 32 32, auto` }}
     >
       {confettiConfig.active && (
@@ -188,12 +196,13 @@ function WhackFruitGame() {
                 key={i}
                 className="w-24 h-24 flex items-center justify-center rounded-2xl bg-white text-black shadow-lg cursor-pointer text-4xl"
                 whileTap={{ scale: 0.85 }}
-                onClick={(e) => handleCellClick(cell, e)}
+                onClick={(e) => handleCellClick(i, e)} // pass index instead of cell
               >
                 {cell ? cell.icon : ""}
               </motion.div>
             ))}
           </div>
+
 
           <div className="w-full max-w-md h-4 bg-gray-800 rounded-2xl overflow-hidden">
             <motion.div
