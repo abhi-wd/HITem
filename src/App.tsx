@@ -30,9 +30,6 @@ function ConnectMenu() {
   if (isConnected) {
     return (
       <div className="flex flex-col items-center">
-        <div className="mb-3 text-center">
-          <div className="w-3 h-3 bg-green-400 rounded-full mx-auto"></div>
-        </div>
         <WhackFruitGame />
       </div>
     );
