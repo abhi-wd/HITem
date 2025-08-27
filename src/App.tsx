@@ -32,8 +32,6 @@ function ConnectMenu() {
       <div className="flex flex-col items-center">
         <div className="mb-3 text-center">
           <div className="w-3 h-3 bg-green-400 rounded-full mx-auto"></div>
-          {/* Replace address with just "." */}
-          <div className="text-xs">.</div>
         </div>
         <WhackFruitGame />
       </div>
@@ -159,7 +157,7 @@ function WhackFruitGame() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4"
+      className="flex flex-col items-center justify-center min-h-[90vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4"
       style={{ cursor: `url('https://cdn-icons-png.flaticon.com/512/1622/1622060.png') 32 32, auto` }}
     >
       {confettiConfig.active && (
