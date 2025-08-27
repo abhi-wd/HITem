@@ -14,8 +14,10 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-4">
-      <ConnectMenu />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-2">
+      <div className="w-full max-w-sm bg-white/10 rounded-2xl shadow-lg p-4 text-center">
+        <ConnectMenu />
+      </div>
     </div>
   );
 }
@@ -24,13 +26,12 @@ function ConnectMenu() {
   const { isConnected, address } = useAccount();
   const { connect, connectors } = useConnect();
 
-
   if (isConnected) {
     return (
-      <div className="w-full flex flex-col items-center">
-        <div className="mb-4 text-center">
-          <div className="font-bold">✅ Connected</div>
-          <div className="text-sm">{address}</div>
+      <div className="flex flex-col items-center">
+        <div className="mb-3 text-center">
+          <div className="font-bold text-green-300">✅ Connected</div>
+          <div className="text-xs break-all">{address}</div>
         </div>
         <WhackFruitGame />
       </div>
@@ -41,12 +42,13 @@ function ConnectMenu() {
     <button
       type="button"
       onClick={() => connect({ connector: connectors[0] })}
-      className="px-6 py-3 rounded-2xl text-lg bg-yellow-400 text-black hover:bg-yellow-500"
+      className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
     >
       Connect Wallet
     </button>
   );
 }
+
 
 function WhackFruitGame() {
   const [timeLeft, setTimeLeft] = useState(30);
