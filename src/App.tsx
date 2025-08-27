@@ -36,13 +36,14 @@ function ConnectMenu() {
   }
 
   return (
-    <button
-      type="button"
-      onClick={() => connect({ connector: connectors[0] })}
-      className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
-    >
-      Connect Wallet
-    </button>
+    // <button
+    //   type="button"
+    //   onClick={() => connect({ connector: connectors[0] })}
+    //   className="px-4 py-2 rounded-xl text-sm bg-yellow-400 text-black hover:bg-yellow-500"
+    // >
+    //   Connect Wallet
+    // </button>
+    <WhackFruitGame />
   );
 }
 
@@ -77,6 +78,7 @@ function WhackFruitGame() {
   }, [timeLeft, bombsHit, gameStarted, gameOver]);
 
   // Spawn
+  // Spawn
   useEffect(() => {
     if (!gameStarted || gameOver) return;
 
@@ -93,6 +95,7 @@ function WhackFruitGame() {
       else if (rand < 0.5) type = "bomb";
 
       setGrid((prev) => {
+        if (prev[idx]) return prev; // already occupied → skip
         const newGrid = [...prev];
         newGrid[idx] = {
           type,
@@ -106,25 +109,35 @@ function WhackFruitGame() {
         return newGrid;
       });
 
+      // clear **slow** if not clicked
       setTimeout(() => {
         setGrid((prev) => {
+          if (!prev[idx]) return prev; // already clicked → ignore
           const newGrid = [...prev];
           newGrid[idx] = null;
           return newGrid;
         });
-      }, 900);
+      }, 1800); // keep slightly longer
     };
 
+    // spawn fast
     spawn();
-    const spawnInterval = setInterval(spawn, 1200);
+    const spawnInterval = setInterval(spawn, 500); // faster rate
 
     return () => clearInterval(spawnInterval);
   }, [gameStarted, gameOver]);
 
   // Clicks
   const handleCellClick = (index: number, e: React.MouseEvent) => {
-    const cell = grid[index]; // always read from latest grid state
+    const cell = grid[index];
     if (!cell) return;
+
+    // clear immediately on click
+    setGrid((prev) => {
+      const newGrid = [...prev];
+      newGrid[index] = null;
+      return newGrid;
+    });
 
     if (cell.type === "coin") {
       setTokens((t) => t + 1);
@@ -145,6 +158,7 @@ function WhackFruitGame() {
   };
 
 
+
   const handleStart = () => {
     setGameStarted(true);
     setTimeLeft(30);
@@ -161,7 +175,7 @@ function WhackFruitGame() {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-[90vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-y-4 p-x-4"
+      className="flex flex-col items-center justify-center min-h-[95vh] bg-gradient-to-b from-purple-600 to-indigo-900 text-white p-y-4 p-x-4"
       style={{ cursor: `url('https://cdn-icons-png.flaticon.com/512/1622/1622060.png') 32 32, auto` }}
     >
       {confettiConfig.active && (
