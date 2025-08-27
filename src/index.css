@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   background-color: #181818;
   color: rgba(255, 255, 255, 0.87);
@@ -17,5 +21,27 @@
   :root {
     background-color: #f8f8f8;
     color: #181818;
+  }
+}
+
+/* Screen shake for bomb */
+.shake {
+  animation: shake 0.5s;
+}
+@keyframes shake {
+  0% {
+    transform: translate(3px, 3px);
+  }
+  25% {
+    transform: translate(-3px, 3px);
+  }
+  50% {
+    transform: translate(-3px, -3px);
+  }
+  75% {
+    transform: translate(3px, -3px);
+  }
+  100% {
+    transform: translate(0, 0);
   }
 }
